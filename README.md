@@ -4,7 +4,8 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 OutPut : 
 
-![image](https://github.com/user-attachments/assets/4fca72ad-0da2-4b13-932d-f2171eafcf56)
+![image](https://github.com/user-attachments/assets/f1c50070-9efe-44cf-9b32-fff404d90cef)
+
 
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
