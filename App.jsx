@@ -3,11 +3,23 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, TextInput } 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import profilepic from './assets/image1.png';
+import axios from 'axios';
 
 const App = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [pinMenuVisible, setPinMenuVisible] = useState(false);
   const [messageInput, setMessageInput] = useState('');
+  const [messagesshown, setMessagesshown] = useState([]);
+
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get('https://qa.corider.in/assignment/chat?page=0');
+      const data = await response.json();
+      setMessagesshown(data.chats || []);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -43,7 +55,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+   
       <View style={styles.header}>
         <Ionicons name="arrow-back" size={30} color="#000" />
         <Text style={styles.title}>Trip 1</Text>
@@ -51,7 +63,7 @@ const App = () => {
       </View>
 
     
-      {/* Menu Options */}
+  
       {menuVisible && (
         <View style={styles.menu}>
           {menuOptions.map((option) => (
@@ -63,7 +75,7 @@ const App = () => {
         </View>
       )}
 
-      {/* Trip Information */}
+     
       <View style={styles.infoContainer}>
         <Image source={profilepic} style={styles.profileImage} />
         <View style={styles.infoTextContainer}>
@@ -81,28 +93,29 @@ const App = () => {
         <View style={styles.line} />
       </View>
 
-      {/* Chat Section */}
+      
       <FlatList
         data={messages}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View
             style={[
               styles.messageContainer,
-              item.type === 'sent' ? styles.sentMessageContainer : styles.receivedMessageContainer,
+              item.sender.self ? styles.sentMessageContainer : styles.receivedMessageContainer,
             ]}
           >
-            {item.type === 'received' && (
-              <Image source={item.profilePic} style={styles.profileImageSmall} />
+            {!item.sender.self && (
+              <Image source={profilepic} style={styles.profileImageSmall} />
             )}
             <View style={styles.messageBox}>
-              <Text style={styles.messageText}>{item.text}</Text>
+              <Text style={styles.messageText}>{item.message}</Text>
             </View>
           </View>
         )}
       />
+    
 
-      {/* Reply Section */}
+    
       <View style={styles.replyContainer}>
         <TextInput
           style={styles.replyInput}
